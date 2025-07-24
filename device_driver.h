@@ -20,3 +20,9 @@ public:
         return "ReadFailException";
     }
 };
+class WriteFailException : public std::exception {
+public:
+    char const* what() const override {
+        return "WriteFailException";
+    }
+};
