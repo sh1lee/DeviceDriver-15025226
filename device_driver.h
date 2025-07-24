@@ -9,7 +9,6 @@ public:
     int read(long address);
     void write(long address, int data);
 
-
 protected:
     FlashMemoryDevice* m_hardware;
 };
@@ -25,4 +24,22 @@ public:
     char const* what() const override {
         return "WriteFailException";
     }
+};
+
+class Application {
+public:
+    Application(DeviceDriver* dd) : dd{ dd } {}
+    void readAndPrint(long startAddr, long endAddr) {
+        for (long addr = startAddr; addr <= endAddr; addr++) {
+            dd->read(addr);
+        }
+    }
+    void writeAll(unsigned char value) {
+        for (long addr = 0x00; addr <= 0x04; addr++) {
+            dd->write(addr, value);
+        }
+    }
+
+private:
+    DeviceDriver* dd;
 };

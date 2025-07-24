@@ -56,6 +56,27 @@ TEST(DeviceDriver, WriteFailExceptionTC) {
 	EXPECT_THROW(driver.write((long)0xB, 7), WriteFailException);
 }
 
+TEST(Application, ReadAndPrintTC) {
+	NiceMock<FlashMock> mock;
+	DeviceDriver dd{ &mock };
+	Application app{ &dd };
+	EXPECT_CALL(mock, read)
+		.Times(25);
+
+	app.readAndPrint(0x00, 0x04);
+}
+
+TEST(Application, WriteAll) {
+	NiceMock<FlashMock> mock;
+	DeviceDriver dd{ &mock };
+	Application app{ &dd };
+	EXPECT_CALL(mock, read)
+		.Times(5)
+		.WillRepeatedly(Return((unsigned char(0xFF))));
+
+	app.writeAll(0x77);
+}
+
 int main() {
 	::testing::InitGoogleMock();
 	return RUN_ALL_TESTS();
